@@ -1,0 +1,18 @@
+dcat_import.dcat_source.*:
+  type: config_entity
+  label: 'DCAT source config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    uuid:
+      type: string
+    iri:
+      type: uri
+      label: 'IRI'
+    description:
+      type: text
+      label: 'Description'

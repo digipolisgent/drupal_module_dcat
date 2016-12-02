@@ -1,0 +1,13 @@
+name: DCAT
+type: module
+description: Provides the different classes of DCAT as entities
+dependencies:
+  - taxonomy
+  - datetime
+  - telephone
+  - text
+  - link
+  - options
+  - inline_entity_form
+core: 8.x
+package: DCAT

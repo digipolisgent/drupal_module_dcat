@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains dcat_import.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function dcat_import_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the dcat_import module.
+    case 'help.page.dcat_import':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Import DCAT feeds.') . '</p>';
+      return $output;
+
+    default:
+  }
+}

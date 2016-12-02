@@ -1,0 +1,20 @@
+{
+  "name": "drupal/dcat",
+  "type": "drupal-module",
+  "description": "Provides the possibility to integrate external DCAT providers and import the datasets those DCAT feeds offer.",
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/dcat",
+  "authors": [
+    {
+      "name": "Wesley De Vrient",
+      "homepage":"https://www.drupal.org/u/wesleydv",
+      "role": "Maintainer"
+    }
+  ],
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/dcat",
+    "source": "http://cgit.drupalcode.org/dcat"
+  },
+  "require": { }
+}

@@ -1,0 +1,47 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - dcat.dcat_vcard_type.organization
+    - field.field.dcat_vcard.organization.email
+    - field.field.dcat_vcard.organization.telephone
+  module:
+    - user
+id: dcat_vcard.organization.default
+targetEntityType: dcat_vcard
+bundle: organization
+mode: default
+content:
+  external_id:
+    label: above
+    type: uri_link
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+  email:
+    weight: 2
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+  telephone:
+    weight: 3
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  name:
+    label: hidden
+    type: string
+    weight: 1
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  user_id:
+    label: hidden
+    type: author
+    weight: 4
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }

@@ -1,0 +1,8 @@
+
+# DCAT source menu items definition
+entity.dcat_source.collection:
+  title: 'DCAT sources'
+  route_name: entity.dcat_source.collection
+  description: 'List DCAT sources'
+  parent: dcat.admin_structure.dcat.settings
+  weight: -50

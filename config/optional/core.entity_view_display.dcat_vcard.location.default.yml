@@ -1,0 +1,72 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - dcat.dcat_vcard_type.location
+    - field.field.dcat_vcard.location.country
+    - field.field.dcat_vcard.location.locality
+    - field.field.dcat_vcard.location.postal_code
+    - field.field.dcat_vcard.location.region
+    - field.field.dcat_vcard.location.street_address
+  module:
+    - text
+    - user
+id: dcat_vcard.location.default
+targetEntityType: dcat_vcard
+bundle: location
+mode: default
+content:
+  external_id:
+    label: above
+    type: uri_link
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+  country:
+    weight: 6
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  locality:
+    weight: 4
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: string
+  postal_code:
+    weight: 3
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  region:
+    weight: 5
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  street_address:
+    weight: 2
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  name:
+    label: hidden
+    type: string
+    weight: 1
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  user_id:
+    label: hidden
+    type: author
+    weight: 7
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }
