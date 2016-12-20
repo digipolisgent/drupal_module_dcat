@@ -9,7 +9,7 @@ id: dcat_distribution.dcat_distribution.description
 field_name: description
 entity_type: dcat_distribution
 bundle: dcat_distribution
-label: Discription
+label: Description
 description: 'The description of the distribution.'
 required: false
 translatable: false

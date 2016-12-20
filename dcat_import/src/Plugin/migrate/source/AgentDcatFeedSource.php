@@ -9,7 +9,7 @@ use EasyRdf_Graph;
  * Agent feed source.
  *
  * @MigrateSource(
- *   id = "dcat_feed_agent"
+ *   id = "dcat.agent"
  * )
  */
 class AgentDcatFeedSource extends DcatFeedSource {
@@ -58,6 +58,7 @@ class AgentDcatFeedSource extends DcatFeedSource {
     return array(
       'uri' => t('URI / ID'),
       'name' => t('Name'),
+      'type' => t('Type'),
     );
   }
 
@@ -72,6 +73,7 @@ class AgentDcatFeedSource extends DcatFeedSource {
       $data[] = array(
         'uri' => $agent->getUri(),
         'name' => $this->getValue($agent, 'foaf:name'),
+        'agent_type' => $this->getValue($agent, 'dc:type'),
       );
     }
 

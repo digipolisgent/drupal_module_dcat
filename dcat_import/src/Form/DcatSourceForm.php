@@ -2,6 +2,8 @@
 
 namespace Drupal\dcat_import\Form;
 
+use Drupal\Core\Url;
+use Drupal\dcat_import\Entity\DcatSource;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -18,6 +20,7 @@ class DcatSourceForm extends EntityForm {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
+    /** @var DcatSource $dcat_source */
     $dcat_source = $this->entity;
     $form['label'] = [
       '#type' => 'textfield',
@@ -41,16 +44,43 @@ class DcatSourceForm extends EntityForm {
       '#type' => 'url',
       '#title' => $this->t('IRI'),
       '#maxlength' => 255,
-      '#default_value' => $dcat_source->getIri(),
+      '#default_value' => $dcat_source->iri,
       '#description' => $this->t("IRI for the DCAT source."),
+      '#required' => TRUE,
+    ];
+
+    $form['format'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Format'),
+      '#default_value' => $dcat_source->format,
+      '#description' => $this->t("Format of the DCAT source."),
+      '#options' => [
+        'guess' => $this->t('Guess'),
+        'php' => $this->t('RDF/PHP'),
+        'json' => $this->t('RDF/JSON Resource-Centric'),
+        'jsonld' => $this->t('JSON-LD'),
+        'ntriples' => $this->t('N-Triples'),
+        'turtle' => $this->t('Turtle Terse RDF Triple Language'),
+        'rdfxml' => $this->t('RDF/XML'),
+        'rdfa' => $this->t('RDFa'),
+      ],
       '#required' => TRUE,
     ];
 
     $form['description'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Description'),
-      '#default_value' => $dcat_source->getDescription(),
+      '#default_value' => $dcat_source->description,
       '#description' => $this->t("Description for the DCAT source."),
+    ];
+
+    $form['global_theme'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use global theme'),
+      '#default_value' => $dcat_source->global_theme,
+      '#description' => $this->t("Remap the themes to the global themes as defined in <a href=':url'>DCAT import settings</a>", [
+        ':url' => Url::fromRoute('dcat_import.admin_settings')->toString(),
+      ]),
     ];
 
     return $form;
@@ -60,6 +90,7 @@ class DcatSourceForm extends EntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
+    /** @var DcatSource $dcat_source */
     $dcat_source = $this->entity;
     $status = $dcat_source->save();
 

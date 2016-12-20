@@ -45,10 +45,10 @@ use Drupal\user\UserInterface;
  *     "status" = "status",
  *   },
  *   links = {
- *     "canonical" = "/admin/structure/dcat/agent/{dcat_agent}",
+ *     "canonical" = "/agent/{dcat_agent}",
  *     "add-form" = "/admin/structure/dcat/agent/add",
- *     "edit-form" = "/admin/structure/dcat/agent/{dcat_agent}/edit",
- *     "delete-form" = "/admin/structure/dcat/agent/{dcat_agent}/delete",
+ *     "edit-form" = "/agent/{dcat_agent}/edit",
+ *     "delete-form" = "/agent/{dcat_agent}/delete",
  *     "collection" = "/admin/structure/dcat/agent",
  *   },
  *   field_ui_base_route = "dcat_agent.settings"

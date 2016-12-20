@@ -2,13 +2,15 @@
 
 namespace Drupal\dcat_import\Plugin\migrate\source;
 
+use Drupal\taxonomy\Plugin\views\wizard\TaxonomyTerm;
 use EasyRdf_Resource;
+use Drupal\migrate\Row;
 
 /**
  * DCAT Dataset feed source.
  *
  * @MigrateSource(
- *   id = "dcat_feed_dataset"
+ *   id = "dcat.dataset"
  * )
  */
 class DatasetDcatFeedSource extends DcatFeedSource {
@@ -56,7 +58,7 @@ class DatasetDcatFeedSource extends DcatFeedSource {
         'title' => $this->getValue($dataset, 'dc:title'),
         'description' => $this->getValue($dataset, 'dc:description'),
         'issued' => $this->getDateValue($dataset, 'dc:issued'),
-        'modified' => $this->getDateValue($dataset, 'dc:issued'),
+        'modified' => $this->getDateValue($dataset, 'dc:modified'),
         'landing_page' => $this->getValue($dataset, 'dcat:landingPage'),
         'distribution' => $this->getValue($dataset, 'dcat:distribution'),
         'accrual_periodicity' => $this->getValue($dataset, 'dc:accrualPeriodicity'),
@@ -70,6 +72,35 @@ class DatasetDcatFeedSource extends DcatFeedSource {
     }
 
     return new \ArrayIterator($data);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function prepareRow(Row $row) {
+    // Allow themes to be remapped.
+    if (!empty($this->configuration['global_theme'])) {
+      $themes = $row->getSourceProperty('theme');
+      $themes = is_array($themes) ? $themes : array($themes);
+      $new_themes = [];
+
+      foreach ($themes as $theme) {
+        $query = \Drupal::entityQuery('taxonomy_term')
+          ->condition('vid', 'dataset_theme')
+          ->condition('mapping', $theme);
+
+        $ids = $query->execute();
+        /** @var TaxonomyTerm $term */
+        foreach (\Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple($ids) as $term) {
+          $uri = $term->get('external_id')->getValue();
+          $new_themes[] = $uri[0]['uri'];
+        }
+      }
+
+      $row->setSourceProperty('theme', $new_themes);
+    }
+
+    return parent::prepareRow($row);
   }
 
   /**

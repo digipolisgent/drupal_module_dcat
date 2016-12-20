@@ -95,13 +95,19 @@ class DcatGraphTest extends UnitTestCase {
    */
   public function providerGetNoneBlankResources() {
     $graph = new DcatGraph();
+    $graph->add('http://example.com', 'dc:title', 'Title of Page');
+    $graph->add('http://example.com/empty', 'dc:title', 'Title of Page');
+
     $resource_empty = $graph->newBNode();
-    $resource = new EasyRdf_Resource('http://example.com');
+    $resource_notype = $graph->resource('http://example.com/empty');
+
+    $resource = $graph->resource('http://example.com');
+    $resource->setType('foaf:Person');
 
     return [
-      [[], [$resource_empty]],
+      [[], [$resource_empty, $resource_notype]],
       [[$resource], [$resource]],
-      [[$resource], [$resource, $resource_empty]],
+      [[$resource], [$resource, $resource_empty, $resource_notype]],
     ];
   }
 

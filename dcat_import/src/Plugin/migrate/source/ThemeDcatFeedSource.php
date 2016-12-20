@@ -9,7 +9,7 @@ use EasyRdf_Graph;
  * Theme feed source.
  *
  * @MigrateSource(
- *   id = "dcat_feed_theme"
+ *   id = "dcat.theme"
  * )
  */
 class ThemeDcatFeedSource extends DcatFeedSource {

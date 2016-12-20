@@ -192,4 +192,41 @@ abstract class DcatFeedSource extends SourcePluginBase {
     return $this->unifyReturnValue($dates);
   }
 
+  /**
+   * Get a certain property from an EasyRdf resource as an email string.
+   *
+   * Basically removes mailto: part.
+   *
+   * @param \EasyRdf_Resource $resource
+   *   The EasyRdf resource to get the property from.
+   * @param string $property
+   *   The name of the property to get.
+   *
+   * @return null|string|array
+   *   Null if empty, string if single value, array if multi value.
+   */
+  public function getEmailValue(EasyRdf_Resource $resource, $property) {
+    $values = $this->getValueArray($resource, $property);
+
+    $emails = [];
+    foreach ($values as $value) {
+      $emails[] = $this->stripMailto($value);
+    }
+
+    return $this->unifyReturnValue($emails);
+  }
+
+  /**
+   * Strip mailto: at the start of the given value.
+   *
+   * @param string $value
+   *   The value to strip mailto: from e.g. mailto:me@example.com.
+   *
+   * @return string
+   *   The value without the mailto: part e.g. me@example.com.
+   */
+  public function stripMailto($value) {
+    return preg_replace("/^mailto:/", '', $value);
+  }
+
 }

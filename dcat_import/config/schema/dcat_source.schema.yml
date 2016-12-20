@@ -16,3 +16,9 @@ dcat_import.dcat_source.*:
     description:
       type: text
       label: 'Description'
+    global_theme:
+      type: boolean
+      label: 'Global theme'
+    format:
+      type: string
+      label: 'Format'

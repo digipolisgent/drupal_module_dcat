@@ -86,4 +86,29 @@ class DcatFeedSourceTest extends UnitTestCase {
     ];
   }
 
+  /**
+   * Test stripMailto().
+   *
+   * @dataProvider providerStripMailto
+   */
+  public function testStripMailto($expected_result, $value) {
+    $this->assertSame($expected_result, $this->source->stripMailto($value));
+  }
+
+  /**
+   * Provides data and expected results for the test method.
+   *
+   * @return array
+   *   Data and expected results.
+   */
+  public function providerStripMailto() {
+    return [
+      ['', ''],
+      ['me@example.com', 'me@example.com'],
+      ['me@example.com', 'mailto:me@example.com'],
+      ['me@example.mailto:com', 'me@example.mailto:com'],
+      ['mailto:me@example.com', 'mailto:mailto:me@example.com'],
+    ];
+  }
+
 }

@@ -6,7 +6,7 @@ namespace Drupal\dcat_import\Plugin\migrate\source;
  * DCAT Dataset keyword feed source.
  *
  * @MigrateSource(
- *   id = "dcat_feed_dataset_keyword"
+ *   id = "dcat.dataset_keyword"
  * )
  */
 class DatasetKeywordDcatFeedSource extends TermDcatFeedSource {

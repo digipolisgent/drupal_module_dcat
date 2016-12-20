@@ -1,0 +1,10 @@
+migrate_plus.source.dcat.*:
+  type: migrate_source
+  label: 'DCAT feed'
+  mapping:
+    format:
+      type: string
+      label: 'Format'
+    uri:
+      type: uri
+      label: 'URI'

@@ -116,4 +116,14 @@ content:
     weight: 11
     settings: {  }
     third_party_settings: {  }
+  dcat_status:
+    type: link_separate
+    weight: 12
+    label: above
+    settings:
+      trim_length: 80
+      rel: ''
+      target: ''
+      url_only: false
+      url_plain: false
 hidden: {  }

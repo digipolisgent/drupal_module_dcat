@@ -20,6 +20,16 @@ class DcatGraph extends EasyRdf_Graph {
    */
   public $pagerArgument = 'page';
 
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct($uri = NULL, $data = NULL, $format = NULL) {
+    parent::__construct($uri, $data, $format);
+
+    \EasyRdf_Namespace::set('adms', 'http://www.w3.org/ns/adms#');
+  }
+
   /**
    * {@inheritdoc}
    */
@@ -78,7 +88,7 @@ class DcatGraph extends EasyRdf_Graph {
 
     /** @var EasyRdf_Resource $resource */
     foreach ($resources as $key => $resource) {
-      if ($resource->isBNode()) {
+      if ($resource->isBNode() || empty($resource->type())) {
         unset($resources[$key]);
       }
     }

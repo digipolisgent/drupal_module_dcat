@@ -9,7 +9,7 @@ use EasyRdf_Graph;
  * Agent feed source.
  *
  * @MigrateSource(
- *   id = "dcat_feed_vcard"
+ *   id = "dcat.vcard"
  * )
  */
 class VcardDcatFeedSource extends DcatFeedSource {
@@ -96,7 +96,7 @@ class VcardDcatFeedSource extends DcatFeedSource {
         'uri' => $agent->getUri(),
         'type' => $bundle,
         'name' => $this->getValue($agent, 'vcard:fn'),
-        'email' => $this->getValue($agent, 'vcard:hasEmail'),
+        'email' => $this->getEmailValue($agent, 'vcard:hasEmail'),
         'telephone' => $this->getValue($agent, 'vcard:hasTelephone'),
         'country' => $this->getValue($agent, 'vcard:country-name'),
         'locality' => $this->getValue($agent, 'vcard:locality'),

@@ -47,57 +47,51 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
    *
    * @var string
    */
-  protected $id;
+  public $id;
 
   /**
    * The DCAT source label.
    *
    * @var string
    */
-  protected $label;
+  public $label;
 
   /**
    * The DCAT source iri.
    *
    * @var string
    */
-  protected $iri;
+  public $iri;
+
+  /**
+   * The DCAT source format.
+   *
+   * @var string
+   */
+  public $format;
+
+  /**
+   * The DCAT source global theme boolean.
+   *
+   * @var bool
+   */
+  public $global_theme = FALSE;
 
   /**
    * The DCAT source description.
    *
    * @var string
    */
-  protected $description;
+  public $description;
 
   /**
-   * {@inheritdoc}
+   * Return the global theme migrate id.
+   *
+   * @return string
+   *   The global theme migrate id.
    */
-  public function getIri() {
-    return $this->iri;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setIri($iri) {
-    $this->iri = $iri;
-    return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDescription() {
-    return $this->description;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setDescription($description) {
-    $this->description = $description;
-    return $this;
+  public static function migrateGlobalThemeId() {
+    return 'dcat_import_theme_global';
   }
 
   /**
@@ -184,7 +178,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
       $migration = Migration::create(array('id' => $id));
     }
     else {
-      $migration = \Drupal::service('config.factory')->getEditable('migrate_plus.migration.' . $id);
+      $migration = Migration::load($id);
     }
 
     $migration->set('migration_group', $this->migrateGroupId());
@@ -213,13 +207,14 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
     }
 
     $group->set('label', $this->label());
-    $group->set('description', $this->getDescription());
+    $group->set('description', $this->description);
     $group->set('source_type', t('DCAT feed'));
     $group->set('module', 'dcat_import');
     $group->set('shared_configuration', array(
       'source' => array(
-        'uri' => $this->getIri(),
-        'format' => 'turtle',
+        'uri' => $this->iri,
+        'format' => $this->format,
+        'global_theme' => (bool) $this->global_theme,
       ),
     ));
     $group->save();
@@ -233,8 +228,10 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
 
     $dataset->set('label', t('Datasets'));
     $dataset->set('source', array(
-      'plugin' => 'dcat_feed_dataset',
+      'plugin' => 'dcat.dataset',
     ));
+
+    $migrate_theme_id = $this->global_theme ? $this->migrateGlobalThemeId() : $this->themeMigrateId();
 
     $dataset->set('process', array(
       'external_id' => 'uri',
@@ -243,6 +240,8 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
       'issued' => 'issued',
       'modified' => 'modified',
       'landing_page' => 'landing_page',
+      'spatial_geographical' => 'spatial_geographical',
+      'accrual_periodicity' => 'accrual_periodicity',
       'distribution' => array(
         'plugin' => 'migration',
         'migration' => $this->distributionMigrateId(),
@@ -269,7 +268,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
       ),
       'theme' => array(
         'plugin' => 'migration',
-        'migration' => $this->themeMigrateId(),
+        'migration' => $migrate_theme_id,
         'source' => 'theme',
       ),
     ));
@@ -284,7 +283,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
         $this->datasetKeywordMigrateId(),
         $this->agentMigrateId(),
         $this->vCardMigrateId(),
-        $this->themeMigrateId(),
+        $migrate_theme_id,
       ),
       'optional' => array(),
     ));
@@ -300,7 +299,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
 
     $distribution->set('label', t('Distribution'));
     $distribution->set('source', array(
-      'plugin' => 'dcat_feed_distribution',
+      'plugin' => 'dcat.distribution',
     ));
 
     $distribution->set('process', array(
@@ -316,6 +315,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
       'license' => 'license',
       'media_type' => 'media_type',
       'rights' => 'rights',
+      'dcat_status' => 'dcat_status',
     ));
 
     $distribution->set('destination', array(
@@ -333,7 +333,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
 
     $dataset_keyword->set('label', t('Dataset keywords'));
     $dataset_keyword->set('source', array(
-      'plugin' => 'dcat_feed_dataset_keyword',
+      'plugin' => 'dcat.dataset_keyword',
     ));
 
     $dataset_keyword->set('process', array(
@@ -359,12 +359,13 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
 
     $agent->set('label', t('Agent'));
     $agent->set('source', array(
-      'plugin' => 'dcat_feed_agent',
+      'plugin' => 'dcat.agent',
     ));
 
     $agent->set('process', array(
       'external_id' => 'uri',
       'name' => 'name',
+      'type' => 'agent_type',
     ));
 
     $agent->set('destination', array(
@@ -382,7 +383,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
 
     $vcard->set('label', t('vCard'));
     $vcard->set('source', array(
-      'plugin' => 'dcat_feed_vcard',
+      'plugin' => 'dcat.vcard',
     ));
 
     $vcard->set('process', array(
@@ -414,7 +415,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
 
     $theme->set('label', t('Theme'));
     $theme->set('source', array(
-      'plugin' => 'dcat_feed_theme',
+      'plugin' => 'dcat.theme',
     ));
 
     $theme->set('process', array(
@@ -446,7 +447,10 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
     $this->saveMigrateDatasetKeyword();
     $this->saveMigrateAgent();
     $this->saveMigrateVcard();
-    $this->saveMigrateTheme();
+
+    if (!$this->global_theme) {
+      $this->saveMigrateTheme();
+    }
 
     // Finally save the original DCAT Source entity.
     return parent::save();
@@ -467,6 +471,9 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
     $config_factory->getEditable('migrate_plus.migration.' . $this->datasetKeywordMigrateId())->delete();
     $config_factory->getEditable('migrate_plus.migration.' . $this->agentMigrateId())->delete();
     $config_factory->getEditable('migrate_plus.migration.' . $this->vCardMigrateId())->delete();
+    if (!$this->global_theme) {
+      $config_factory->getEditable('migrate_plus.migration.' . $this->themeMigrateId())->delete();
+    }
   }
 
 }

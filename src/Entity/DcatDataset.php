@@ -45,10 +45,10 @@ use Drupal\user\UserInterface;
  *     "status" = "status",
  *   },
  *   links = {
- *     "canonical" = "/admin/structure/dcat/dataset/{dcat_dataset}",
+ *     "canonical" = "/dataset/{dcat_dataset}",
  *     "add-form" = "/admin/structure/dcat/dataset/add",
- *     "edit-form" = "/admin/structure/dcat/dataset/{dcat_dataset}/edit",
- *     "delete-form" = "/admin/structure/dcat/dataset/{dcat_dataset}/delete",
+ *     "edit-form" = "/dataset/{dcat_dataset}/edit",
+ *     "delete-form" = "/dataset/{dcat_dataset}/delete",
  *     "collection" = "/admin/structure/dcat/dataset",
  *   },
  *   field_ui_base_route = "dcat_dataset.settings"

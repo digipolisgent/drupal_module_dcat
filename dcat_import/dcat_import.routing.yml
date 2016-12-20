@@ -1,0 +1,7 @@
+dcat_import.admin_settings:
+  path: '/admin/structure/dcat/settings/dcat_import'
+  defaults:
+    _form: 'Drupal\dcat_import\Form\DcatImportForm'
+    _title: 'DCAT import settings'
+  requirements:
+    _permission: 'administer dcat sources'

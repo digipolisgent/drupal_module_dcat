@@ -8,7 +8,7 @@ use EasyRdf_Resource;
  * DCAT Dataset feed source.
  *
  * @MigrateSource(
- *   id = "dcat_feed_distribution"
+ *   id = "dcat.distribution"
  * )
  */
 class DistributionDcatFeedSource extends DcatFeedSource {
@@ -37,6 +37,7 @@ class DistributionDcatFeedSource extends DcatFeedSource {
       'license' => t('License'),
       'media_type' => t('Media type'),
       'rights' => t('Rights'),
+      'dcat_status' => t('Status'),
     );
   }
 
@@ -57,10 +58,11 @@ class DistributionDcatFeedSource extends DcatFeedSource {
         'access_url' => $this->getValue($distribution, 'dcat:accessURL'),
         'download_url' => $this->getValue($distribution, 'dcat:downloadURL'),
         'byte_size' => $this->getValue($distribution, 'dcat:byteSize'),
-        'format' => $this->getValue($distribution, 'dcat:format'),
-        'license' => $this->getValue($distribution, 'dcat:license'),
+        'format' => $this->getValue($distribution, 'dc:format'),
+        'license' => $this->getValue($distribution, 'dc:license'),
         'media_type' => $this->getValue($distribution, 'dcat:mediaType'),
-        'rights' => $this->getValue($distribution, 'dcat:rights'),
+        'rights' => $this->getValue($distribution, 'dc:rights'),
+        'dcat_status' => $this->getValue($distribution, 'adms:status'),
       );
     }
 
