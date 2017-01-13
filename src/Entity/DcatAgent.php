@@ -17,10 +17,17 @@ use Drupal\user\UserInterface;
  * @ContentEntityType(
  *   id = "dcat_agent",
  *   label = @Translation("Agent"),
+ *   label_singular = @Translation("Agent"),
+ *   label_plural = @Translation("Agents"),
+ *   label_count = @PluralTranslation(
+ *     singular = "@count agent",
+ *     plural = "@count agents",
+ *   ),
  *   handlers = {
+ *     "storage" = "Drupal\Core\Entity\Sql\SqlContentEntityStorage",
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "list_builder" = "Drupal\dcat\DcatAgentListBuilder",
- *     "views_data" = "Drupal\dcat\Entity\DcatAgentViewsData",
+ *     "views_data" = "Drupal\views\EntityViewsData",
  *
  *     "form" = {
  *       "default" = "Drupal\dcat\Form\DcatAgentForm",
@@ -36,6 +43,8 @@ use Drupal\user\UserInterface;
  *   base_table = "dcat_agent",
  *   data_table = "dcat_agent_field_data",
  *   admin_permission = "administer agent entities",
+ *   fieldable = TRUE,
+ *   translatable = TRUE,
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "name",
@@ -213,8 +222,7 @@ class DcatAgent extends ContentEntityBase implements DcatAgentInterface {
         'type' => 'string_textfield',
         'weight' => -4,
       ))
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['type'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Type'))

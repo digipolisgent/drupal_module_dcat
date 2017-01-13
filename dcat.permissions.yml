@@ -69,6 +69,11 @@ view unpublished agent entities:
 add vcard entities:
   title: 'Create new vCard entities'
 
+administer vcard enity types:
+  title: 'Administer vCard enity types'
+  description: 'Allow manage vCard entity types.'
+  restrict access: true
+
 administer vcard entities:
   title: 'Administer vCard entities'
   description: 'Allow to access the administration form to configure vCard entities.'
@@ -88,3 +93,7 @@ view published vcard entities:
 
 view unpublished vcard entities:
   title: 'View unpublished vCard entities'
+
+access dcat admin pages:
+  title: 'Access DCAT admin pages'
+  description: 'Allow to access the DCAT administration pages.'

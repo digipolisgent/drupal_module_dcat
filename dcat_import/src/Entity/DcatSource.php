@@ -20,6 +20,7 @@ use Drupal\migrate_plus\Entity\Migration;
  *       "edit" = "Drupal\dcat_import\Form\DcatSourceForm",
  *       "delete" = "Drupal\dcat_import\Form\DcatSourceDeleteForm"
  *     },
+ *    "access" = "Drupal\dcat_import\DcatSourceAccessControlHandler",
  *     "route_provider" = {
  *       "html" = "Drupal\dcat_import\DcatSourceHtmlRouteProvider",
  *     },

@@ -22,7 +22,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *     },
  *   },
  *   config_prefix = "dcat_vcard_type",
- *   admin_permission = "administer site configuration",
+ *   admin_permission = "administer vcard enity types",
  *   bundle_of = "dcat_vcard",
  *   entity_keys = {
  *     "id" = "id",

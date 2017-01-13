@@ -17,11 +17,18 @@ use Drupal\user\UserInterface;
  * @ContentEntityType(
  *   id = "dcat_vcard",
  *   label = @Translation("vCard"),
+ *   label_singular = @Translation("vCard"),
+ *   label_plural = @Translation("vCards"),
+ *   label_count = @PluralTranslation(
+ *     singular = "@count vCard",
+ *     plural = "@count vCards",
+ *   ),
  *   bundle_label = @Translation("vCard type"),
  *   handlers = {
+ *     "storage" = "Drupal\Core\Entity\Sql\SqlContentEntityStorage",
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "list_builder" = "Drupal\dcat\DcatVcardListBuilder",
- *     "views_data" = "Drupal\dcat\Entity\DcatVcardViewsData",
+ *     "views_data" = "Drupal\views\EntityViewsData",
  *
  *     "form" = {
  *       "default" = "Drupal\dcat\Form\DcatVcardForm",
@@ -37,6 +44,8 @@ use Drupal\user\UserInterface;
  *   base_table = "dcat_vcard",
  *   data_table = "dcat_vcard_field_data",
  *   admin_permission = "administer vcard entities",
+ *   fieldable = TRUE,
+ *   translatable = TRUE,
  *   entity_keys = {
  *     "id" = "id",
  *     "bundle" = "type",
@@ -224,8 +233,7 @@ class DcatVcard extends ContentEntityBase implements DcatVcardInterface {
         'type' => 'string_textfield',
         'weight' => -4,
       ))
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Publishing status'))

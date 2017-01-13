@@ -17,10 +17,17 @@ use Drupal\user\UserInterface;
  * @ContentEntityType(
  *   id = "dcat_dataset",
  *   label = @Translation("Dataset"),
+ *   label_singular = @Translation("Dataset"),
+ *   label_plural = @Translation("Datasets"),
+ *   label_count = @PluralTranslation(
+ *     singular = "@count dataset",
+ *     plural = "@count datasets",
+ *   ),
  *   handlers = {
+ *     "storage" = "Drupal\Core\Entity\Sql\SqlContentEntityStorage",
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "list_builder" = "Drupal\dcat\DcatDatasetListBuilder",
- *     "views_data" = "Drupal\dcat\Entity\DcatDatasetViewsData",
+ *     "views_data" = "Drupal\views\EntityViewsData",
  *
  *     "form" = {
  *       "default" = "Drupal\dcat\Form\DcatDatasetForm",
@@ -36,6 +43,8 @@ use Drupal\user\UserInterface;
  *   base_table = "dcat_dataset",
  *   data_table = "dcat_dataset_field_data",
  *   admin_permission = "administer dataset entities",
+ *   fieldable = TRUE,
+ *   translatable = TRUE,
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "name",
@@ -213,8 +222,7 @@ class DcatDataset extends ContentEntityBase implements DcatDatasetInterface {
         'type' => 'string_textfield',
         'weight' => -4,
       ))
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Publishing status'))

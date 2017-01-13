@@ -17,10 +17,17 @@ use Drupal\user\UserInterface;
  * @ContentEntityType(
  *   id = "dcat_distribution",
  *   label = @Translation("Distribution"),
+ *   label_singular = @Translation("Distribution"),
+ *   label_plural = @Translation("Distributions"),
+ *   label_count = @PluralTranslation(
+ *     singular = "@count distribution",
+ *     plural = "@count distributions",
+ *   ),
  *   handlers = {
+ *     "storage" = "Drupal\Core\Entity\Sql\SqlContentEntityStorage",
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
  *     "list_builder" = "Drupal\dcat\DcatDistributionListBuilder",
- *     "views_data" = "Drupal\dcat\Entity\DcatDistributionViewsData",
+ *     "views_data" = "Drupal\views\EntityViewsData",
  *
  *     "form" = {
  *       "default" = "Drupal\dcat\Form\DcatDistributionForm",
@@ -36,6 +43,8 @@ use Drupal\user\UserInterface;
  *   base_table = "dcat_distribution",
  *   data_table = "dcat_distribution_field_data",
  *   admin_permission = "administer distribution entities",
+ *   fieldable = TRUE,
+ *   translatable = TRUE,
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "name",
@@ -210,8 +219,7 @@ class DcatDistribution extends ContentEntityBase implements DcatDistributionInte
         'type' => 'string_textfield',
         'weight' => -4,
       ))
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Publishing status'))
