@@ -23,8 +23,7 @@ class DcatSourceAccessControlHandler extends EntityAccessControlHandler {
         return AccessResult::allowed();
     }
 
-    // Unknown operation, no opinion.
-    return AccessResult::neutral();
+    return parent::checkAccess($entity, $operation, $account);
   }
 
 }
