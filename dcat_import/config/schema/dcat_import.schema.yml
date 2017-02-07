@@ -9,6 +9,6 @@ dcat_import.settings:
         iri:
           type: uri
           label: 'Global theme iri'
-        iri:
+        format:
           type: string
           label: 'Global theme format'

@@ -39,6 +39,7 @@ class DcatSettingsTest extends WebTestBase {
     ]);
     $edit = [
       'global_theme_iri' => 'http://example.com',
+      'global_theme_format' => 'guess',
     ];
 
     $this->drupalLogin($user);
@@ -48,6 +49,7 @@ class DcatSettingsTest extends WebTestBase {
     $this->drupalPostForm(Url::fromRoute('dcat_import.admin_settings'), $edit, t('Save configuration'));
     $this->assertText('The configuration options have been saved.');
     $this->assertFieldByName('global_theme_iri', 'http://example.com');
+    $this->assertFieldByName('global_theme_format', 'guess');
   }
 
 }
