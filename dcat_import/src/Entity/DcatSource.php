@@ -79,6 +79,13 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
   public $global_theme = FALSE;
 
   /**
+   * The lowercase taxonomy terms boolean.
+   *
+   * @var bool
+   */
+  public $lowercase_taxonomy_terms = FALSE;
+
+  /**
    * The DCAT source description.
    *
    * @var string
@@ -216,6 +223,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
         'uri' => $this->iri,
         'format' => $this->format,
         'global_theme' => (bool) $this->global_theme,
+        'lowercase_taxonomy_terms' => (bool) $this->lowercase_taxonomy_terms,
       ),
     ));
     $group->save();

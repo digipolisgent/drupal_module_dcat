@@ -46,6 +46,7 @@ class DcatSourceTest extends WebTestBase {
       'iri' => 'http://example.com/dcat_source',
       'description' => $this->randomString(256),
       'global_theme' => 0,
+      'lowercase_taxonomy_terms' => 0,
     ];
 
     $this->drupalLogin($user);

@@ -22,4 +22,3 @@ library (both already part of core).
 
 Currently the following features are under development:
 - Export a combined DCAT feed
-- Allow the remapping of dcat:theme to your own list

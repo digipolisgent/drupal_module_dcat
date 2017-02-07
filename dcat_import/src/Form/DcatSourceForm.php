@@ -83,6 +83,13 @@ class DcatSourceForm extends EntityForm {
       ]),
     ];
 
+    $form['lowercase_taxonomy_terms'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Transform taxonomy terms to lowercase'),
+      '#default_value' => $dcat_source->lowercase_taxonomy_terms,
+      '#description' => $this->t("When checked taxonomy terms without an IRI (currently only keywords) are converted to lowercase to avoid duplicates."),
+    ];
+
     return $form;
   }
 

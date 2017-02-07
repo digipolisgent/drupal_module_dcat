@@ -13,43 +13,26 @@ targetEntityType: dcat_vcard
 bundle: individual
 mode: default
 content:
-  external_id:
-    label: above
-    type: uri_link
-    weight: 0
-    settings: {  }
-    third_party_settings: {  }
   email:
-    weight: 3
-    label: above
+    weight: 1
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     type: basic_string
   nickname:
-    weight: 2
-    label: above
+    weight: 0
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
     type: string
   telephone:
-    weight: 4
-    label: above
+    weight: 2
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
     type: string
-  name:
-    label: hidden
-    type: string
-    weight: 1
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-  user_id:
-    label: hidden
-    type: author
-    weight: 5
-    settings: {  }
-    third_party_settings: {  }
-hidden: {  }
+hidden:
+  external_id: true
+  user_id: true

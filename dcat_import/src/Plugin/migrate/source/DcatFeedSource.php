@@ -136,13 +136,16 @@ abstract class DcatFeedSource extends SourcePluginBase {
    * @param mixed $value
    *   EasyRdf_Resource or EasyRdf_Literal object.
    *
-   * @return string
-   *   A single value representing the object.
+   * @return string|null
+   *   A single value representing the object or Null if it is a blank resource.
    */
   public function getSingleValue($value) {
     $class = get_class($value);
     switch ($class) {
       case 'EasyRdf_Resource':
+        if ($value->isBNode()) {
+          return NULL;
+        }
         return $value->getUri();
 
       case 'EasyRdf_Literal_DateTime':

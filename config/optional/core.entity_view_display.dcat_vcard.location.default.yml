@@ -16,57 +16,40 @@ targetEntityType: dcat_vcard
 bundle: location
 mode: default
 content:
-  external_id:
-    label: above
-    type: uri_link
-    weight: 0
-    settings: {  }
-    third_party_settings: {  }
   country:
-    weight: 6
-    label: above
+    weight: 4
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
     type: string
   locality:
-    weight: 4
-    label: above
+    weight: 2
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: string
+    type: text_default
   postal_code:
-    weight: 3
-    label: above
+    weight: 1
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
     type: string
   region:
-    weight: 5
-    label: above
+    weight: 3
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
     type: string
   street_address:
-    weight: 2
-    label: above
+    weight: 0
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
     type: string
-  name:
-    label: hidden
-    type: string
-    weight: 1
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-  user_id:
-    label: hidden
-    type: author
-    weight: 7
-    settings: {  }
-    third_party_settings: {  }
-hidden: {  }
+hidden:
+  external_id: true
+  user_id: true

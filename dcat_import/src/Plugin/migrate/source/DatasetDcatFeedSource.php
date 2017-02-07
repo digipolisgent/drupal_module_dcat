@@ -2,6 +2,7 @@
 
 namespace Drupal\dcat_import\Plugin\migrate\source;
 
+use Drupal\Component\Utility\Unicode;
 use Drupal\taxonomy\Plugin\views\wizard\TaxonomyTerm;
 use EasyRdf_Resource;
 use Drupal\migrate\Row;
@@ -49,11 +50,11 @@ class DatasetDcatFeedSource extends DcatFeedSource {
    * {@inheritdoc}
    */
   public function initializeIterator() {
-    $data = array();
+    $data = [];
 
     /** @var EasyRdf_Resource $dataset */
     foreach ($this->getSourceData() as $dataset) {
-      $data[] = array(
+      $data[] = [
         'uri' => $dataset->getUri(),
         'title' => $this->getValue($dataset, 'dc:title'),
         'description' => $this->getValue($dataset, 'dc:description'),
@@ -68,7 +69,7 @@ class DatasetDcatFeedSource extends DcatFeedSource {
         'theme' => $this->getValue($dataset, 'dcat:theme'),
         'publisher' => $this->getValue($dataset, 'dc:publisher'),
         'contact_point' => $this->getValue($dataset, 'dcat:contactPoint'),
-      );
+      ];
     }
 
     return new \ArrayIterator($data);
@@ -81,7 +82,7 @@ class DatasetDcatFeedSource extends DcatFeedSource {
     // Allow themes to be remapped.
     if (!empty($this->configuration['global_theme'])) {
       $themes = $row->getSourceProperty('theme');
-      $themes = is_array($themes) ? $themes : array($themes);
+      $themes = is_array($themes) ? $themes : [$themes];
       $new_themes = [];
 
       foreach ($themes as $theme) {
@@ -99,6 +100,20 @@ class DatasetDcatFeedSource extends DcatFeedSource {
 
       $row->setSourceProperty('theme', $new_themes);
     }
+
+    if (!empty($this->configuration['lowercase_taxonomy_terms'])) {
+      $terms = $row->getSourceProperty('keyword');
+      $terms = is_array($terms) ? $terms : [$terms];
+      $terms = array_map('strtolower', $terms);
+      $row->setSourceProperty('keyword', array_unique($terms));
+    }
+
+    $keywords = [];
+    foreach ($row->getSourceProperty('keyword') as $keyword) {
+      $keywords[] = Unicode::truncate($keyword, 255);
+    }
+    array_filter($keywords);
+    $row->setSourceProperty('keyword', $keywords);
 
     return parent::prepareRow($row);
   }

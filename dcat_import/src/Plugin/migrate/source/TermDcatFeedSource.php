@@ -2,8 +2,10 @@
 
 namespace Drupal\dcat_import\Plugin\migrate\source;
 
+use Drupal\Component\Utility\Unicode;
 use EasyRdf_Resource;
 use EasyRdf_Graph;
+use Drupal\migrate\Row;
 
 /**
  * DCAT Term feed source.
@@ -44,6 +46,17 @@ abstract class TermDcatFeedSource extends DcatFeedSource {
         $data += array_combine($keywords, $keywords);
       }
     }
+
+    foreach ($data as &$keyword) {
+      $keyword = Unicode::truncate($keyword, 255);
+    }
+
+    if (!empty($this->configuration['lowercase_taxonomy_terms'])) {
+      $data = array_map('strtolower', $data);
+      $data = array_unique($data);
+    }
+
+    array_filter($data);
 
     return $data;
   }

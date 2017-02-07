@@ -8,3 +8,6 @@ migrate_plus.source.dcat.*:
     uri:
       type: uri
       label: 'URI'
+    lowercase_taxonomy_terms:
+      type: boolean
+      label: 'Lowercase taxonomy terms'
