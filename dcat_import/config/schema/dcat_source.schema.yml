@@ -25,3 +25,6 @@ dcat_import.dcat_source.*:
     lowercase_taxonomy_terms:
       type: boolean
       label: 'Lowercase taxonomy terms'
+    import_langcode:
+      type: string
+      label: 'Import language'

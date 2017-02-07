@@ -86,6 +86,13 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
   public $lowercase_taxonomy_terms = FALSE;
 
   /**
+   * Import language.
+   *
+   * @var string
+   */
+  public $import_langcode;
+
+  /**
    * The DCAT source description.
    *
    * @var string
@@ -224,6 +231,12 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
         'format' => $this->format,
         'global_theme' => (bool) $this->global_theme,
         'lowercase_taxonomy_terms' => (bool) $this->lowercase_taxonomy_terms,
+      ),
+      'process' => array(
+        'langcode' => array(
+          'plugin' => 'default_value',
+          'default_value' => $this->import_langcode,
+        ),
       ),
     ));
     $group->save();

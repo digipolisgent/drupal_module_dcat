@@ -6,6 +6,7 @@ use Drupal\Core\Url;
 use Drupal\dcat_import\Entity\DcatSource;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageInterface;
 
 /**
  * Class DcatSourceForm.
@@ -90,7 +91,35 @@ class DcatSourceForm extends EntityForm {
       '#description' => $this->t("When checked taxonomy terms without an IRI (currently only keywords) are converted to lowercase to avoid duplicates."),
     ];
 
+    if (\Drupal::moduleHandler()->moduleExists('content_translation')) {
+      $form['import_langcode'] = [
+        '#type' => 'select',
+        '#title' => $this->t('Import language'),
+        '#default_value' => !empty($dcat_source->import_langcode) ? $dcat_source->import_langcode : LanguageInterface::LANGCODE_NOT_SPECIFIED,
+        '#description' => $this->t("Select which language the imported datasets, distributions, vcards and agents should have."),
+        '#options' => static::getLanguageOptions(),
+      ];
+    }
+
+
     return $form;
+  }
+
+  /**
+   * Returns the options for the langcode form element.
+   *
+   * @return array
+   *   An array containing the options.
+   */
+  protected static function getLanguageOptions() {
+    $language_options = [];
+
+    $languages = \Drupal::languageManager()->getLanguages(LanguageInterface::STATE_ALL);
+    foreach ($languages as $langcode => $language) {
+      $language_options[$langcode] = $language->isLocked() ? t('- @name -', array('@name' => $language->getName())) : $language->getName();
+    }
+
+    return $language_options;
   }
 
   /**
