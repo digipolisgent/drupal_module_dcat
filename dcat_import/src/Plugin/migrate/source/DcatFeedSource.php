@@ -28,6 +28,16 @@ abstract class DcatFeedSource extends SourcePluginBase {
   private $extractionDone = FALSE;
 
   /**
+   * {@inheritdoc}
+   */
+  protected $cacheCounts = TRUE;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $trackChanges = TRUE;
+
+  /**
    * Returns the DCAT type to extract from the feed.
    *
    * E.g. dcat:Dataset, dcat:Distribution ...
