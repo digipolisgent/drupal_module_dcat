@@ -73,7 +73,6 @@ class VcardUITest extends WebTestBase {
     // Adding and viewing entity.
     $this->drupalPostForm(Url::fromRoute('entity.dcat_vcard.add_form', array('dcat_vcard_type' => 'individual')), $edit, t('Save'));
     $this->assertText('Created the ' . $name . ' vCard.');
-    $this->assertText('http://example.com/vcard');
     $this->assertText($nickname);
     $this->assertText('test@example.com');
     $this->assertText($tel);
@@ -109,7 +108,6 @@ class VcardUITest extends WebTestBase {
     // Adding and viewing entity.
     $this->drupalPostForm(Url::fromRoute('entity.dcat_vcard.add_form', array('dcat_vcard_type' => 'location')), $edit, t('Save'));
     $this->assertText('Created the ' . $name . ' vCard.');
-    $this->assertText('http://example.com/vcard');
   }
 
   /**
@@ -140,7 +138,6 @@ class VcardUITest extends WebTestBase {
     // Adding and viewing entity.
     $this->drupalPostForm(Url::fromRoute('entity.dcat_vcard.add_form', array('dcat_vcard_type' => 'organization')), $edit, t('Save'));
     $this->assertText('Created the ' . $name . ' vCard.');
-    $this->assertText('http://example.com/vcard');
     $this->assertText('test@example.com');
     $this->assertText($tel);
   }

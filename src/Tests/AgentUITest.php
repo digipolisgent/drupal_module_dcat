@@ -69,7 +69,6 @@ class AgentUITest extends WebTestBase {
     // Adding and viewing entity.
     $this->drupalPostForm(Url::fromRoute('entity.dcat_agent.add_form'), $edit, t('Save'));
     $this->assertText('Created the ' . $name . ' Agent.');
-    $this->assertText('http://example.com/agent');
   }
 
 }
