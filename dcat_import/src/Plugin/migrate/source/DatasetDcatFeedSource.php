@@ -49,30 +49,22 @@ class DatasetDcatFeedSource extends DcatFeedSource {
   /**
    * {@inheritdoc}
    */
-  public function initializeIterator() {
-    $data = [];
-
-    /** @var EasyRdf_Resource $dataset */
-    foreach ($this->getSourceData() as $dataset) {
-      $data[] = [
-        'uri' => $dataset->getUri(),
-        'title' => $this->getValue($dataset, 'dc:title'),
-        'description' => $this->getValue($dataset, 'dc:description'),
-        'issued' => $this->getDateValue($dataset, 'dc:issued'),
-        'modified' => $this->getDateValue($dataset, 'dc:modified'),
-        'landing_page' => $this->getValue($dataset, 'dcat:landingPage'),
-        'distribution' => $this->getValue($dataset, 'dcat:distribution'),
-        'accrual_periodicity' => $this->getValue($dataset, 'dc:accrualPeriodicity'),
-        'keyword' => $this->getValue($dataset, 'dcat:keyword'),
-        'spatial_geographical' => $this->getValue($dataset, 'dc:spatial'),
-        'temporal' => $this->getValue($dataset, 'dc:temporal'),
-        'theme' => $this->getValue($dataset, 'dcat:theme'),
-        'publisher' => $this->getValue($dataset, 'dc:publisher'),
-        'contact_point' => $this->getValue($dataset, 'dcat:contactPoint'),
-      ];
-    }
-
-    return new \ArrayIterator($data);
+  public function convertResource(EasyRdf_Resource $resource) {
+    return parent::convertResource($resource) + [
+      'title' => $this->getValue($resource, 'dc:title'),
+      'description' => $this->getValue($resource, 'dc:description'),
+      'issued' => $this->getDateValue($resource, 'dc:issued'),
+      'modified' => $this->getDateValue($resource, 'dc:modified'),
+      'landing_page' => $this->getValue($resource, 'dcat:landingPage'),
+      'distribution' => $this->getValue($resource, 'dcat:distribution'),
+      'accrual_periodicity' => $this->getValue($resource, 'dc:accrualPeriodicity'),
+      'keyword' => $this->getValue($resource, 'dcat:keyword'),
+      'spatial_geographical' => $this->getValue($resource, 'dc:spatial'),
+      'temporal' => $this->getValue($resource, 'dc:temporal'),
+      'theme' => $this->getValue($resource, 'dcat:theme'),
+      'publisher' => $this->getValue($resource, 'dc:publisher'),
+      'contact_point' => $this->getValue($resource, 'dcat:contactPoint'),
+    ];
   }
 
   /**
@@ -109,7 +101,7 @@ class DatasetDcatFeedSource extends DcatFeedSource {
     }
 
     $keywords = [];
-    foreach ($row->getSourceProperty('keyword') as $keyword) {
+    foreach ((array) $row->getSourceProperty('keyword') as $keyword) {
       $keywords[] = Unicode::truncate($keyword, 255);
     }
     array_filter($keywords);

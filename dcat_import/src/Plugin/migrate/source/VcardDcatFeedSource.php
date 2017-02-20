@@ -71,43 +71,44 @@ class VcardDcatFeedSource extends DcatFeedSource {
   }
 
   /**
-   * {@inheritdoc}
+   * Resource type to vcard bundle mapping.
+   *
+   * @return array
+   *   Bundle mapping.
    */
-  public function initializeIterator() {
-    $bundle_mapping = array(
+  private static function bundleMapping() {
+    return [
       'vcard:Organization' => 'organization',
       'vcard:Individual' => 'individual',
       'vcard:Location' => 'location',
-    );
+    ];
+  }
 
-    $data = array();
-
-    /** @var EasyRdf_Resource $agent */
-    foreach ($this->getSourceData() as $agent) {
-      if (isset($bundle_mapping[$agent->type()])) {
-        $bundle = $bundle_mapping[$agent->type()];
-      }
-      else {
-        // Default to organization;
-        $bundle = 'organization';
-      }
-
-      $data[] = array(
-        'uri' => $agent->getUri(),
-        'type' => $bundle,
-        'name' => $this->getValue($agent, 'vcard:fn'),
-        'email' => $this->getEmailValue($agent, 'vcard:hasEmail'),
-        'telephone' => $this->getValue($agent, 'vcard:hasTelephone'),
-        'country' => $this->getValue($agent, 'vcard:country-name'),
-        'locality' => $this->getValue($agent, 'vcard:locality'),
-        'postal_code' => $this->getValue($agent, 'vcard:postal-code'),
-        'region' => $this->getValue($agent, 'vcard:region'),
-        'street_address' => $this->getValue($agent, 'vcard:street-address'),
-        'nickname' => $this->getValue($agent, 'vcard:hasNickname'),
-      );
+  /**
+   * {@inheritdoc}
+   */
+  public function convertResource(EasyRdf_Resource $resource) {
+    if (isset(self::bundleMapping()[$resource->type()])) {
+      $bundle = self::bundleMapping()[$resource->type()];
+    }
+    else {
+      // Default to organization;
+      $bundle = 'organization';
     }
 
-    return new \ArrayIterator($data);
+    return parent::convertResource($resource) + [
+      'uri' => $resource->getUri(),
+      'type' => $bundle,
+      'name' => $this->getValue($resource, 'vcard:fn'),
+      'email' => $this->getEmailValue($resource, 'vcard:hasEmail'),
+      'telephone' => $this->getValue($resource, 'vcard:hasTelephone'),
+      'country' => $this->getValue($resource, 'vcard:country-name'),
+      'locality' => $this->getValue($resource, 'vcard:locality'),
+      'postal_code' => $this->getValue($resource, 'vcard:postal-code'),
+      'region' => $this->getValue($resource, 'vcard:region'),
+      'street_address' => $this->getValue($resource, 'vcard:street-address'),
+      'nickname' => $this->getValue($resource, 'vcard:hasNickname'),
+    ];
   }
 
   /**

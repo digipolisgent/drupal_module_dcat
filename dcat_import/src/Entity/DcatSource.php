@@ -264,6 +264,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
       'landing_page' => 'landing_page',
       'spatial_geographical' => 'spatial_geographical',
       'accrual_periodicity' => 'accrual_periodicity',
+      'status' => 'status',
       'distribution' => array(
         'plugin' => 'migration',
         'migration' => $this->distributionMigrateId(),
@@ -338,6 +339,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
       'media_type' => 'media_type',
       'rights' => 'rights',
       'dcat_status' => 'dcat_status',
+      'status' => 'status',
     ));
 
     $distribution->set('destination', array(
@@ -388,6 +390,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
       'external_id' => 'uri',
       'name' => 'name',
       'type' => 'agent_type',
+      'status' => 'status',
     ));
 
     $agent->set('destination', array(
@@ -420,6 +423,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
       'street_address' => 'street_address',
       'nickname' => 'nickname',
       'type' => 'type',
+      'status' => 'status',
     ));
 
     $vcard->set('destination', array(

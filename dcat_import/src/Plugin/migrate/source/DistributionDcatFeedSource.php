@@ -44,29 +44,21 @@ class DistributionDcatFeedSource extends DcatFeedSource {
   /**
    * {@inheritdoc}
    */
-  public function initializeIterator() {
-    $data = array();
-
-    /** @var EasyRdf_Resource $distribution */
-    foreach ($this->getSourceData() as $distribution) {
-      $data[] = array(
-        'uri' => $distribution->getUri(),
-        'title' => $this->getValue($distribution, 'dc:title'),
-        'description' => $this->getValue($distribution, 'dc:description'),
-        'issued' => $this->getDateValue($distribution, 'dc:issued'),
-        'modified' => $this->getDateValue($distribution, 'dc:modified'),
-        'access_url' => $this->getValue($distribution, 'dcat:accessURL'),
-        'download_url' => $this->getValue($distribution, 'dcat:downloadURL'),
-        'byte_size' => $this->getValue($distribution, 'dcat:byteSize'),
-        'format' => $this->getValue($distribution, 'dc:format'),
-        'license' => $this->getValue($distribution, 'dc:license'),
-        'media_type' => $this->getValue($distribution, 'dcat:mediaType'),
-        'rights' => $this->getValue($distribution, 'dc:rights'),
-        'dcat_status' => $this->getValue($distribution, 'adms:status'),
-      );
-    }
-
-    return new \ArrayIterator($data);
+  public function convertResource(EasyRdf_Resource $resource) {
+    return parent::convertResource($resource) + [
+      'title' => $this->getValue($resource, 'dc:title'),
+      'description' => $this->getValue($resource, 'dc:description'),
+      'issued' => $this->getDateValue($resource, 'dc:issued'),
+      'modified' => $this->getDateValue($resource, 'dc:modified'),
+      'access_url' => $this->getValue($resource, 'dcat:accessURL'),
+      'download_url' => $this->getValue($resource, 'dcat:downloadURL'),
+      'byte_size' => $this->getValue($resource, 'dcat:byteSize'),
+      'format' => $this->getValue($resource, 'dc:format'),
+      'license' => $this->getValue($resource, 'dc:license'),
+      'media_type' => $this->getValue($resource, 'dcat:mediaType'),
+      'rights' => $this->getValue($resource, 'dc:rights'),
+      'dcat_status' => $this->getValue($resource, 'adms:status'),
+    ];
   }
 
   /**

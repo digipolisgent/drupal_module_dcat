@@ -2,6 +2,7 @@
 
 namespace Drupal\dcat_import\Plugin\migrate\source;
 
+use Drupal\migrate\Plugin\migrate\id_map\Sql;
 use Drupal\migrate\Plugin\migrate\source\SourcePluginBase;
 use EasyRdf_Graph;
 use EasyRdf_Resource;
@@ -72,12 +73,82 @@ abstract class DcatFeedSource extends SourcePluginBase {
       $pager_argument = isset($this->configuration['pager_argument']) ? $this->configuration['pager_argument'] : NULL;
 
       $graph = DcatGraph::newAndLoad($this->configuration['uri'], $format, $pager_argument);
-      $this->sourceData = $this->getDcatData($graph);
+      $data = $this->getDcatData($graph);
+      $deleted = $this->deletedResources($data, $graph);
 
+      $this->sourceData = array_merge($data, $deleted);
       $this->extractionDone = TRUE;
     }
 
     return $this->sourceData;
+  }
+
+  /**
+   * Returns the deleted resources so they can be unpublished.
+   *
+   * @param array $data
+   *   The current array of data resources.
+   * @param DcatGraph $graph
+   *   The graph used to create the deleted resources.
+   *
+   * @return array
+   *   An array of EasyRdf resources that are deleted in the current graph.
+   */
+  private function deletedResources(array $data, DcatGraph $graph) {
+    $deleted = [];
+    /** @var Sql $map */
+    $map = $this->migration->getIdMap();
+
+    $imported = $map->getDatabase()->select($map->mapTableName(), 'map')
+      ->fields('map', ['sourceid1'])
+      ->execute()
+      ->fetchAllKeyed(0, 0);
+
+    foreach ($data as $resource) {
+      if (!is_object($resource)) {
+        return [];
+      }
+      /** @var EasyRdf_Resource $uri */
+      $uri = $resource->getUri();
+      unset($imported[(string) $uri]);
+    }
+
+    foreach ($imported as $uri => $uuid) {
+      $resource = new EasyRdf_Resource($uri, $graph);
+      $resource->add('deleted', 1);
+      $deleted[] = $resource;
+    }
+
+    return $deleted;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function initializeIterator() {
+    $data = [];
+
+    foreach ($this->getSourceData() as $resource) {
+      $data[] = $this->convertResource($resource);
+    }
+
+    return new \ArrayIterator($data);
+  }
+
+  /**
+   * Convert an EasyRdf resource to an array.
+   *
+   * @param \EasyRdf_Resource $resource
+   *   The resource to covert.
+   *
+   * @return array
+   *   Array of values to import.
+   */
+  public function convertResource(EasyRdf_Resource $resource) {
+    return [
+      'uri' => $resource->getUri(),
+      'status' => !$this->getValue($resource, 'deleted'),
+    ];
   }
 
   /**
@@ -90,7 +161,7 @@ abstract class DcatFeedSource extends SourcePluginBase {
   /**
    * {@inheritdoc}
    */
-  public function count() {
+  public function count($refresh = FALSE) {
     return count($this->getSourceData());
   }
 
