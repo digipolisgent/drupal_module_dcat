@@ -58,7 +58,8 @@ abstract class DcatFeedSource extends SourcePluginBase {
    *   The extracted data.
    */
   public function getDcatData(EasyRdf_Graph $graph) {
-    return $graph->allOfType($this->getDcatType());
+    $data = $graph->allOfType($this->getDcatType());
+    return $graph->getNoneBlankResources($data);
   }
 
   /**
