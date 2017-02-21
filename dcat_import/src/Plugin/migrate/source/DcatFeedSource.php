@@ -269,7 +269,7 @@ abstract class DcatFeedSource extends SourcePluginBase {
 
     $dates = array();
     foreach ($values as $value) {
-      $date = new DrupalDateTime($value);
+      $date = $value instanceof \DateTime ? DrupalDateTime::createFromDateTime($value) : new DrupalDateTime($value);
       $dates[] = $date->format(DATETIME_DATETIME_STORAGE_FORMAT);
     }
 
