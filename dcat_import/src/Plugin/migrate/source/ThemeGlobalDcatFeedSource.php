@@ -56,6 +56,22 @@ class ThemeGlobalDcatFeedSource extends DcatFeedSource {
   }
 
   /**
+   * Returns list of matching tags.
+   *
+   * @return array
+   *   The list of matching tags.
+   */
+  public static function mappingTags() {
+    return [
+      'skos:exactMatch',
+      'skos:closeMatch',
+      'skos:relatedMatch',
+      'skos:broadMatch',
+      'skos:narrowMatch',
+    ];
+  }
+
+  /**
    * Returns the mapping field values for the given $theme.
    *
    * @param EasyRdf_Resource $theme
@@ -65,10 +81,11 @@ class ThemeGlobalDcatFeedSource extends DcatFeedSource {
    *   The mapping values.
    */
   public function getMappingValues(EasyRdf_Resource $theme) {
-    $mapping = $this->getValue($theme, 'skos:exactMatch');
-    if (empty($mapping)) {
-      $mapping = $this->getValue($theme, 'skos:broadMatch');
+    $mapping = [];
+    foreach (self::mappingTags() as $tag) {
+      $mapping = array_merge($mapping, $this->getValueArray($theme, $tag));
     }
+
     return $mapping;
   }
 
