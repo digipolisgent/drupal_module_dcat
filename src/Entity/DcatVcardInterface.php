@@ -4,6 +4,7 @@ namespace Drupal\dcat\Entity;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
+use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\user\EntityOwnerInterface;
 
 /**
@@ -11,7 +12,7 @@ use Drupal\user\EntityOwnerInterface;
  *
  * @ingroup dcat
  */
-interface DcatVcardInterface extends ContentEntityInterface, EntityChangedInterface, EntityOwnerInterface {
+interface DcatVcardInterface extends ContentEntityInterface, EntityChangedInterface, EntityOwnerInterface, EntityPublishedInterface {
 
   // Add get/set methods for your configuration properties here.
   /**
@@ -59,26 +60,5 @@ interface DcatVcardInterface extends ContentEntityInterface, EntityChangedInterf
    *   The called vCard entity.
    */
   public function setCreatedTime($timestamp);
-
-  /**
-   * Returns the vCard published status indicator.
-   *
-   * Unpublished vCard are only visible to restricted users.
-   *
-   * @return bool
-   *   TRUE if the vCard is published.
-   */
-  public function isPublished();
-
-  /**
-   * Sets the published status of a vCard.
-   *
-   * @param bool $published
-   *   TRUE to set this vCard to published, FALSE to set it to unpublished.
-   *
-   * @return \Drupal\dcat\Entity\DcatVcardInterface
-   *   The called vCard entity.
-   */
-  public function setPublished($published);
 
 }

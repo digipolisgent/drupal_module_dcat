@@ -4,6 +4,7 @@ namespace Drupal\dcat\Entity;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
+use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\user\EntityOwnerInterface;
 
 /**
@@ -11,9 +12,7 @@ use Drupal\user\EntityOwnerInterface;
  *
  * @ingroup dcat
  */
-interface DcatDistributionInterface extends  ContentEntityInterface, EntityChangedInterface, EntityOwnerInterface {
-
-  // Add get/set methods for your configuration properties here.
+interface DcatDistributionInterface extends ContentEntityInterface, EntityChangedInterface, EntityOwnerInterface, EntityPublishedInterface {
 
   /**
    * Gets the Distribution name.
@@ -52,26 +51,5 @@ interface DcatDistributionInterface extends  ContentEntityInterface, EntityChang
    *   The called Distribution entity.
    */
   public function setCreatedTime($timestamp);
-
-  /**
-   * Returns the Distribution published status indicator.
-   *
-   * Unpublished Distribution are only visible to restricted users.
-   *
-   * @return bool
-   *   TRUE if the Distribution is published.
-   */
-  public function isPublished();
-
-  /**
-   * Sets the published status of a Distribution.
-   *
-   * @param bool $published
-   *   TRUE to set this Distribution to published, FALSE to set it to unpublished.
-   *
-   * @return \Drupal\dcat\Entity\DcatDistributionInterface
-   *   The called Distribution entity.
-   */
-  public function setPublished($published);
 
 }

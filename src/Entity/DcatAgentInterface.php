@@ -4,6 +4,7 @@ namespace Drupal\dcat\Entity;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
+use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\user\EntityOwnerInterface;
 
 /**
@@ -11,9 +12,7 @@ use Drupal\user\EntityOwnerInterface;
  *
  * @ingroup dcat
  */
-interface DcatAgentInterface extends  ContentEntityInterface, EntityChangedInterface, EntityOwnerInterface {
-
-  // Add get/set methods for your configuration properties here.
+interface DcatAgentInterface extends ContentEntityInterface, EntityChangedInterface, EntityOwnerInterface, EntityPublishedInterface {
 
   /**
    * Gets the Agent name.
@@ -52,26 +51,5 @@ interface DcatAgentInterface extends  ContentEntityInterface, EntityChangedInter
    *   The called Agent entity.
    */
   public function setCreatedTime($timestamp);
-
-  /**
-   * Returns the Agent published status indicator.
-   *
-   * Unpublished Agent are only visible to restricted users.
-   *
-   * @return bool
-   *   TRUE if the Agent is published.
-   */
-  public function isPublished();
-
-  /**
-   * Sets the published status of a Agent.
-   *
-   * @param bool $published
-   *   TRUE to set this Agent to published, FALSE to set it to unpublished.
-   *
-   * @return \Drupal\dcat\Entity\DcatAgentInterface
-   *   The called Agent entity.
-   */
-  public function setPublished($published);
 
 }

@@ -4,6 +4,7 @@ namespace Drupal\dcat\Entity;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
+use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\user\EntityOwnerInterface;
 
 /**
@@ -11,9 +12,7 @@ use Drupal\user\EntityOwnerInterface;
  *
  * @ingroup dcat
  */
-interface DcatDatasetInterface extends  ContentEntityInterface, EntityChangedInterface, EntityOwnerInterface {
-
-  // Add get/set methods for your configuration properties here.
+interface DcatDatasetInterface extends ContentEntityInterface, EntityChangedInterface, EntityOwnerInterface, EntityPublishedInterface {
 
   /**
    * Gets the Dataset name.
@@ -52,26 +51,5 @@ interface DcatDatasetInterface extends  ContentEntityInterface, EntityChangedInt
    *   The called Dataset entity.
    */
   public function setCreatedTime($timestamp);
-
-  /**
-   * Returns the Dataset published status indicator.
-   *
-   * Unpublished Dataset are only visible to restricted users.
-   *
-   * @return bool
-   *   TRUE if the Dataset is published.
-   */
-  public function isPublished();
-
-  /**
-   * Sets the published status of a Dataset.
-   *
-   * @param bool $published
-   *   TRUE to set this Dataset to published, FALSE to set it to unpublished.
-   *
-   * @return \Drupal\dcat\Entity\DcatDatasetInterface
-   *   The called Dataset entity.
-   */
-  public function setPublished($published);
 
 }
