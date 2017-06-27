@@ -54,6 +54,7 @@ function dcat_tokens($type, $tokens, array $data, array $options, BubbleableMeta
         $query = \Drupal::entityQuery('dcat_dataset')->count();
         $query->condition('theme', $tid);
         $replacement[$original] = $query->execute();
+        $bubbleable_metadata->addCacheTags(['dcat_dataset_list']);
       }
     }
   }
