@@ -189,11 +189,9 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
    *   The migration config.
    */
   private function getMigrateConfig($id) {
-    if ($this->isNew()) {
+    $migration = Migration::load($id);
+    if (empty($migration)) {
       $migration = Migration::create(array('id' => $id));
-    }
-    else {
-      $migration = Migration::load($id);
     }
 
     $migration->set('migration_group', $this->migrateGroupId());
