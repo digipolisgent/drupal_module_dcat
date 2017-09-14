@@ -78,11 +78,16 @@ class DatasetDcatFeedSource extends DcatFeedSource {
       $new_themes = [];
 
       foreach ($themes as $theme) {
-        $query = \Drupal::entityQuery('taxonomy_term')
-          ->condition('vid', 'dataset_theme')
-          ->condition('mapping', $theme);
+        $query = \Drupal::entityQuery('taxonomy_term');
+        $idcondition = $query->orConditionGroup()
+          ->condition('mapping', $theme)
+          ->condition('external_id', $theme);
 
-        $ids = $query->execute();
+        $ids = $query
+          ->condition('vid', 'dataset_theme')
+          ->condition($idcondition)
+          ->execute();
+
         /** @var TaxonomyTerm $term */
         foreach (\Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple($ids) as $term) {
           $uri = $term->get('external_id')->getValue();
