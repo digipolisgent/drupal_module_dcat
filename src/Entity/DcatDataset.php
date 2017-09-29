@@ -26,7 +26,7 @@ use Drupal\user\UserInterface;
  *   ),
  *   handlers = {
  *     "storage" = "Drupal\Core\Entity\Sql\SqlContentEntityStorage",
- *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
+ *     "view_builder" = "Drupal\dcat\DcatDatasetViewBuilder",
  *     "list_builder" = "Drupal\dcat\DcatDatasetListBuilder",
  *     "views_data" = "Drupal\views\EntityViewsData",
  *
