@@ -4,6 +4,7 @@ namespace Drupal\dcat_import;
 
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
 
 /**
  * Provides a listing of DCAT source entities.
@@ -25,8 +26,23 @@ class DcatSourceListBuilder extends ConfigEntityListBuilder {
   public function buildRow(EntityInterface $entity) {
     $row['label'] = $entity->label();
     $row['id'] = $entity->id();
-    // You probably want a few more properties here...
     return $row + parent::buildRow($entity);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaultOperations(EntityInterface $entity) {
+    /** @var \Drupal\Core\Config\Entity\ConfigEntityInterface $entity */
+    $operations = parent::getDefaultOperations($entity);
+
+    $operations['import'] = [
+      'title' => t('Import'),
+      'weight' => -10,
+      'url' => Url::fromRoute('dcat_import.import', ['dcat_source' => $entity->id()]),
+    ];
+
+    return $operations;
   }
 
 }
