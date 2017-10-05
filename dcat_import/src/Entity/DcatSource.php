@@ -459,11 +459,9 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
   }
 
   /**
-   * {@inheritdoc}
-   *
    * Create/update the different migrate configurations.
    */
-  public function save() {
+  public function saveMigrations() {
     // Save the different migrate configs.
     $this->saveMigrateGroup();
     $this->saveMigrateDataset();
@@ -475,9 +473,6 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
     if (!$this->global_theme) {
       $this->saveMigrateTheme();
     }
-
-    // Finally save the original DCAT Source entity.
-    return parent::save();
   }
 
   /**

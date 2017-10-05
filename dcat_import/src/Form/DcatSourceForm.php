@@ -128,6 +128,7 @@ class DcatSourceForm extends EntityForm {
   public function save(array $form, FormStateInterface $form_state) {
     /** @var DcatSource $dcat_source */
     $dcat_source = $this->entity;
+    $dcat_source->saveMigrations();
     $status = $dcat_source->save();
 
     switch ($status) {

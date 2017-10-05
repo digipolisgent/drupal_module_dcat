@@ -9,4 +9,9 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
  */
 interface DcatSourceInterface extends ConfigEntityInterface {
 
+  /**
+   * Create/update the different migrate configurations.
+   */
+  public function saveMigrations();
+
 }

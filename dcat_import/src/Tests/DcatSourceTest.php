@@ -80,6 +80,7 @@ class DcatSourceTest extends WebTestBase {
       'iri' => $iri,
       'global_theme' => FALSE,
     ]);
+    $source->saveMigrations();
     $source->save();
 
     $group = \Drupal::config('migrate_plus.migration_group.dcat_import_' . $id);
@@ -114,6 +115,7 @@ class DcatSourceTest extends WebTestBase {
       'iri' => $iri,
       'global_theme' => TRUE,
     ]);
+    $source->saveMigrations();
     $source->save();
 
     $group = \Drupal::config('migrate_plus.migration_group.dcat_import_' . $id);
