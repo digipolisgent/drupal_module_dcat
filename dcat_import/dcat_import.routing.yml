@@ -14,3 +14,11 @@ dcat_import.import:
   requirements:
     _permission: 'administer dcat sources'
 
+dcat_import.log:
+  path: '/admin/structure/dcat/settings/dcat_source/{dcat_source}/log'
+  defaults:
+    _controller: 'Drupal\dcat_import\Controller\LogController::logPage'
+    _title: 'Import log'
+  requirements:
+    _permission: 'administer dcat sources'
+

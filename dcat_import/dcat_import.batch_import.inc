@@ -10,7 +10,6 @@ use Drupal\dcat_import\DcatImportLogMigrateMessage;
 use Drupal\migrate_tools\MigrateExecutable;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-
 /**
  * Batch callback, run import on migration.
  *
@@ -20,7 +19,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  *   Batch context.
  */
 function dcat_import_batch_import($id, array $context) {
-  /* @var $queue_factory \Drupal\Core\Queue\QueueFactory */
   $manager = \Drupal::service('plugin.manager.migration');
   $plugins = $manager->createInstances([$id]);
   /* @var $migration \Drupal\migrate\Plugin\MigrationInterface */

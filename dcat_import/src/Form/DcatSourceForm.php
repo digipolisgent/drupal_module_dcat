@@ -91,7 +91,7 @@ class DcatSourceForm extends EntityForm {
       '#description' => $this->t("When checked taxonomy terms without an IRI (currently only keywords) are converted to lowercase to avoid duplicates."),
     ];
 
-    if (\Drupal::moduleHandler()->moduleExists('content_translation')) {
+    if (\Drupal::moduleHandler()->moduleExists('language')) {
       $form['import_langcode'] = [
         '#type' => 'select',
         '#title' => $this->t('Import language'),

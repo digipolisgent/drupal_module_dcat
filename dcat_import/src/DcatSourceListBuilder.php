@@ -36,6 +36,12 @@ class DcatSourceListBuilder extends ConfigEntityListBuilder {
     /** @var \Drupal\Core\Config\Entity\ConfigEntityInterface $entity */
     $operations = parent::getDefaultOperations($entity);
 
+    $operations['log'] = [
+      'title' => t('Import log'),
+      'weight' => -20,
+      'url' => Url::fromRoute('dcat_import.log', ['dcat_source' => $entity->id()]),
+    ];
+
     $operations['import'] = [
       'title' => t('Import'),
       'weight' => -10,
