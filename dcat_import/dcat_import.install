@@ -56,7 +56,7 @@ function dcat_import_schema() {
     ],
     'primary key' => ['id'],
     'indexes' => [
-      'migration_start' => ['migration_start'],
+      'import_start' => ['import_start'],
       'migration' => ['migration'],
     ],
   ];
