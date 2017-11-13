@@ -4,6 +4,7 @@ namespace Drupal\dcat_import\Entity;
 
 use Drupal\Core\Config\Config;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\migrate_plus\Entity\MigrationGroup;
 use Drupal\migrate_plus\Entity\Migration;
 
@@ -207,6 +208,8 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
 
   /**
    * Save the migration group config.
+   *
+   * @throws \Drupal\Core\Config\ConfigValueException
    */
   public function saveMigrateGroup() {
     $group_id = $this->migrateGroupId();
@@ -223,6 +226,9 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
     $group->set('description', $this->description);
     $group->set('source_type', t('DCAT feed'));
     $group->set('module', 'dcat_import');
+
+    $langcode = !empty($this->import_langcode) ? $this->import_langcode : \Drupal::languageManager()->getDefaultLanguage()->getId();
+
     $group->set('shared_configuration', array(
       'source' => array(
         'uri' => $this->iri,
@@ -233,7 +239,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
       'process' => array(
         'langcode' => array(
           'plugin' => 'default_value',
-          'default_value' => $this->import_langcode,
+          'default_value' => $langcode,
         ),
       ),
     ));
