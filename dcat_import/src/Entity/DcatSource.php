@@ -255,6 +255,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
     $dataset->set('label', t('Datasets'));
     $dataset->set('source', array(
       'plugin' => 'dcat.dataset',
+      'track_changes' => TRUE,
     ));
 
     $migrate_theme_id = $this->global_theme ? $this->migrateGlobalThemeId() : $this->themeMigrateId();
@@ -264,7 +265,6 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
       'name' => 'title',
       'description' => 'description',
       'issued' => 'issued',
-      'modified' => 'modified',
       'landing_page' => 'landing_page',
       'spatial_geographical' => 'spatial_geographical',
       'accrual_periodicity' => 'accrual_periodicity',
@@ -327,6 +327,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
     $distribution->set('label', t('Distribution'));
     $distribution->set('source', array(
       'plugin' => 'dcat.distribution',
+      'track_changes' => TRUE,
     ));
 
     $distribution->set('process', array(
@@ -334,7 +335,6 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
       'name' => 'title',
       'description' => 'description',
       'issued' => 'issued',
-      'modified' => 'modified',
       'access_url' => 'access_url',
       'download_url' => 'download_url',
       'byte_size' => 'byte_size',
@@ -362,6 +362,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
     $dataset_keyword->set('label', t('Dataset keywords'));
     $dataset_keyword->set('source', array(
       'plugin' => 'dcat.dataset_keyword',
+      'track_changes' => TRUE,
     ));
 
     $dataset_keyword->set('process', array(
@@ -388,13 +389,17 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
     $agent->set('label', t('Agent'));
     $agent->set('source', array(
       'plugin' => 'dcat.agent',
+      'track_changes' => TRUE,
     ));
 
     $agent->set('process', array(
       'external_id' => 'uri',
       'name' => 'name',
       'type' => 'agent_type',
-      'status' => 'status',
+      'status' => [
+        'plugin' => 'default_value',
+        'default_value' => TRUE,
+      ]
     ));
 
     $agent->set('destination', array(
@@ -413,6 +418,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
     $vcard->set('label', t('vCard'));
     $vcard->set('source', array(
       'plugin' => 'dcat.vcard',
+      'track_changes' => TRUE,
     ));
 
     $vcard->set('process', array(
@@ -446,6 +452,7 @@ class DcatSource extends ConfigEntityBase implements DcatSourceInterface {
     $theme->set('label', t('Theme'));
     $theme->set('source', array(
       'plugin' => 'dcat.theme',
+      'track_changes' => TRUE,
     ));
 
     $theme->set('process', array(
