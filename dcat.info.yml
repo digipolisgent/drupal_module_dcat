@@ -8,7 +8,7 @@ dependencies:
   - drupal:user
   - drupal:system
   - drupal:datetime
-  - telephone:telephone
+  - drupal:telephone
   - drupal:text
   - drupal:link
   - drupal:options
