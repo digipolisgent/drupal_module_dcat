@@ -5,6 +5,6 @@ core: 8.x
 package: DCAT
 dependencies:
   - dcat:dcat
-  - migrate:migrate
+  - drupal:migrate
   - migrate_plus:migrate_plus
   - migrate_tools:migrate_tools
