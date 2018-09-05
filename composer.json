@@ -23,6 +23,6 @@
     "source": "http://cgit.drupalcode.org/dcat"
   },
   "require": {
-    "drupal/inline_entity_form": "1.x-dev"
+    "drupal/inline_entity_form": "^1.0@RC"
   }
 }
