@@ -14,3 +14,6 @@ migrate_plus.source.dcat.*:
     import_langcode:
       type: string
       label: 'Import language'
+    track_changes:
+      type: boolean
+      lable: 'Track changes'
