@@ -10,4 +10,4 @@ dcat_import.admin_settings:
   description: 'Set DCAT import global settings.'
   route_name: dcat_import.admin_settings
   parent: dcat.admin_structure.dcat.settings
-  weight: -40
+  weight: -42

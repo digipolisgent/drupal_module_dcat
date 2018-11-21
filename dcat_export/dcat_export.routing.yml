@@ -1,0 +1,10 @@
+dcat_export.admin_settings:
+  path: '/admin/structure/dcat/settings/dcat_export'
+  defaults:
+    _form: 'Drupal\dcat_export\Form\DcatExportSettingsForm'
+    _title: 'DCAT export settings'
+  requirements:
+    _permission: 'administer dcat export'
+
+route_callbacks:
+  - '\Drupal\dcat_export\Routing\ExportRoutes::routes'

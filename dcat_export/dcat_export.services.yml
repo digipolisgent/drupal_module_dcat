@@ -1,0 +1,4 @@
+services:
+  dcat_export:
+    class: Drupal\dcat_export\DcatExportService
+    arguments: ['@config.factory', '@entity_type.manager', '@event_dispatcher', '@path.current']
