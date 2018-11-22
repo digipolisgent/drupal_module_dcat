@@ -168,17 +168,13 @@ class DcatExportController implements ContainerInjectionInterface {
   }
 
   /**
-   * Check whether or not the format exists and is enabled.
+   * Check whether or not the format exists and is activated.
    *
    * @return bool
    *   True if the format exists and is activated.
    */
   protected function validateFormat($format) {
-    if (in_array($format, array_filter($this->config->get('formats')))) {
-      return TRUE;
-    }
-
-    return FALSE;
+    return in_array($format, array_filter($this->config->get('formats')));
   }
 
 }

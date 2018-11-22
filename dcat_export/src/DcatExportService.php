@@ -244,7 +244,7 @@ class DcatExportService {
   }
 
   /**
-   * Add catalog information to the RDF graph.
+   * Add dataset information to the RDF graph.
    *
    * @param \EasyRdf_Graph $graph
    *   The graph object.
@@ -345,7 +345,7 @@ class DcatExportService {
   }
 
   /**
-   * Add dataset distribution information to the RDF graph.
+   * Add distribution information to the RDF graph.
    *
    * @param \EasyRdf_Graph $graph
    *   The graph object.
@@ -483,7 +483,7 @@ class DcatExportService {
   /**
    * Get the date of the latest modified dataset in ISO 8601 format.
    *
-   * @return \Drupal\Core\Entity\ContentEntityInterface[]|false
+   * @return string|false
    *   The modified date of the latest changed dataset or false when no dataset
    *   found.
    *
