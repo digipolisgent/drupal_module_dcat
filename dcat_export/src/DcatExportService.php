@@ -524,17 +524,22 @@ class DcatExportService {
    */
   protected function loadDatasetEntities() {
     $storage = $this->entityTypeManager->getStorage('dcat_dataset');
-    $ids = $storage
+    $query = $storage
       ->getQuery()
       ->condition('status', 1)
-      ->sort('source', 'ASC')
-      ->execute();
+      ->sort('source', 'ASC');
+
+    if ($sources = array_filter($this->config->get('sources'))) {
+      $query->condition('source', $sources, 'IN');
+    }
+
+    $ids = $query->execute();
 
     return $storage->loadMultiple($ids);
   }
 
   /**
-   * Check if the export settings are all set.
+   * Check if the required export settings are all set.
    *
    * @throws \Drupal\dcat\Exception\MissingConfigurationException
    *   When configuration is missing.

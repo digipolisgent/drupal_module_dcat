@@ -2,8 +2,12 @@
 
 namespace Drupal\dcat_export\Form;
 
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
@@ -17,6 +21,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class DcatExportSettingsForm extends ConfigFormBase {
 
   /**
+   * EntityTypeManager object.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * ModuleHandler object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * RouteBuilder object.
    *
    * @var \Drupal\Core\Routing\RouteBuilderInterface
@@ -26,8 +44,11 @@ class DcatExportSettingsForm extends ConfigFormBase {
   /**
    * Class constructor.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, RouteBuilderInterface $route_builder) {
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, RouteBuilderInterface $route_builder) {
     parent::__construct($config_factory);
+
+    $this->entityTypeManager = $entity_type_manager;
+    $this->moduleHandler = $module_handler;
     $this->routeBuilder = $route_builder;
   }
 
@@ -37,6 +58,8 @@ class DcatExportSettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
+      $container->get('entity_type.manager'),
+      $container->get('module_handler'),
       $container->get('router.builder')
     );
   }
@@ -60,18 +83,56 @@ class DcatExportSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('dcat_export.settings');
+    $jsonld_dependency = class_exists('\ML\JsonLD\JsonLD') ? '' : ' <em>(' . $this->t('Please install "ml/json-ld" dependency to use JSON-LD') . ')</em>';
 
     $form['#tree'] = FALSE;
 
-    $form['general'] = [
+    $form['source'] = [
       '#type' => 'details',
-      '#title' => t('General settings'),
+      '#title' => t('Source'),
       '#open' => TRUE,
     ];
 
-    $general = &$form['general'];
+    $source = &$form['source'];
+    $source_options = $this->getDcatSourceOptions();
 
-    $general['formats'] = [
+    $source['sources'] = [
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Sources'),
+      '#description' => $this->t('Select the sources to include in the DCAT export output or leave blank to select all data sets.'),
+      '#default_value' => $config->get('sources'),
+      '#multiple' => TRUE,
+      '#options' => $source_options,
+      '#access' => (bool) $source_options,
+    ];
+
+    $source['no_sources'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'p',
+      '#value' => $this->t('There are no import sources available. All existing datasets will be included.'),
+      '#access' => (bool) !$source_options,
+    ];
+
+    if ($this->moduleHandler->moduleExists('dcat_import')) {
+      $source['dcat_import'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => $this->t('Import sources can be added on the <a href="@url">DCAT source settings page</a>.', [
+          '@url' => Url::fromRoute('entity.dcat_source.collection')->toString(),
+        ]),
+        '#access' => (bool) !$source_options,
+      ];
+    }
+
+    $form['output'] = [
+      '#type' => 'details',
+      '#title' => t('Output'),
+      '#open' => TRUE,
+    ];
+
+    $output = &$form['output'];
+
+    $output['formats'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Output formats'),
       '#description' => $this->t('Append the extension of the selected output formats to the /dcat path.'),
@@ -81,18 +142,18 @@ class DcatExportSettingsForm extends ConfigFormBase {
         'xml' => 'XML (.xml)',
         'ttl' => 'Turtle (.ttl)',
         'json' => 'JSON (.json)',
-        'jsonld' => 'JSON-LD (.jsonld)',
+        'jsonld' => 'JSON-LD (.jsonld)' . $jsonld_dependency,
         'nt' => 'N-Tripples (.nt)',
       ],
       '#required' => TRUE,
     ];
 
-    $general['endpoints'] = [
+    $output['endpoints'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Available endpoints'),
     ];
 
-    $general['endpoints']['list'] = [
+    $output['endpoints']['list'] = [
       '#theme' => 'item_list',
       '#list_type' => 'ul',
       '#items' => $this->getEndpointLinks(),
@@ -219,6 +280,32 @@ class DcatExportSettingsForm extends ConfigFormBase {
     }
 
     return $export_paths;
+  }
+
+  /**
+   * Get an option list of DCAT sources.
+   *
+   * @return array
+   *   Array containing DCAT sources keyed by ID.
+   */
+  protected function getDcatSourceOptions() {
+    $options = [];
+
+    try {
+      $sources = $this->entityTypeManager->getStorage('dcat_source')->loadMultiple();
+
+      foreach ($sources as $source) {
+        $options[$source->id()] = $source->label();
+      }
+    }
+    catch (\Exception $ex) {
+      // The module dcat_import is not enabled, ignore the exception.
+      if (!$ex instanceof PluginNotFoundException && !$ex instanceof InvalidPluginDefinitionException) {
+        throw $ex;
+      }
+    }
+
+    return $options;
   }
 
 }

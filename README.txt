@@ -12,7 +12,8 @@ INTRODUCTION
 ------------
 
 The DCAT module provides the possibility to integrate external DCAT providers
-and import the datasets those DCAT feeds offer.
+and import the datasets that those DCAT feeds offer. All imported data can be
+combined and exported at a specific endpoint using the dcat_export module
 
  * For a full description of the module, visit the project page:
    https://www.drupal.org/project/dcat
@@ -48,9 +49,9 @@ module. Visit https://www.drupal.org/node/1897420 for further information.
 CONFIGURATION
 -------------
 
-    1. Navigate to Administration > Extend and enable the module and its
+    1. Navigate to /admin/modules and enable the module and its
        dependencies.
-    2. Navigate to Administration > Structure > DCAT to administer DCAT
+    2. Navigate to /admin/structure/dcat to administer DCAT
 
 The main module provides the following entity types:
  * Dataset
@@ -60,11 +61,17 @@ The main module provides the following entity types:
 
 All these entities have the necessary fields to conform with DCAT-AP.
 
+DCAT export:
+    1. Navigate to /admin/modules and enable the dcat_export module.
+    2. Navigate to /admin/structure/dcat/settings/dcat_export and fill in all
+       configuration fields.
+
 
 MAINTAINERS
 -----------
 
  * Wesley De Vrient (wesleydv) - https://www.drupal.org/u/wesleydv
+ * Lennart Van Vaerenbergh (lennartvv) - https://www.drupal.org/u/lennartvv
 
 Supporting organization:
 

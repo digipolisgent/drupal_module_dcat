@@ -2,6 +2,11 @@ dcat_export.settings:
   type: config_object
   label: General settings
   mapping:
+    sources:
+      type: sequence
+      label: The sources to include in the export feed.
+      sequence:
+        type: string
     formats:
       type: sequence
       label: The supported export formats.
