@@ -11,7 +11,6 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
-use Drupal\Core\Routing\RouteBuilderInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -35,21 +34,13 @@ class DcatExportSettingsForm extends ConfigFormBase {
   protected $moduleHandler;
 
   /**
-   * RouteBuilder object.
-   *
-   * @var \Drupal\Core\Routing\RouteBuilderInterface
-   */
-  protected $routeBuilder;
-
-  /**
    * Class constructor.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, RouteBuilderInterface $route_builder) {
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler) {
     parent::__construct($config_factory);
 
     $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;
-    $this->routeBuilder = $route_builder;
   }
 
   /**
@@ -59,8 +50,7 @@ class DcatExportSettingsForm extends ConfigFormBase {
     return new static(
       $container->get('config.factory'),
       $container->get('entity_type.manager'),
-      $container->get('module_handler'),
-      $container->get('router.builder')
+      $container->get('module_handler')
     );
   }
 
@@ -135,15 +125,15 @@ class DcatExportSettingsForm extends ConfigFormBase {
     $output['formats'] = [
       '#type' => 'checkboxes',
       '#title' => $this->t('Output formats'),
-      '#description' => $this->t('Append the extension of the selected output formats to the /dcat path.'),
+      '#description' => $this->t('Add the "_format" query parameter containing an enabled output format to the /dcat path.'),
       '#default_value' => $config->get('formats'),
       '#multiple' => TRUE,
       '#options' => [
-        'xml' => 'XML (.xml)',
-        'ttl' => 'Turtle (.ttl)',
-        'json' => 'JSON (.json)',
-        'jsonld' => 'JSON-LD (.jsonld)' . $jsonld_dependency,
-        'nt' => 'N-Tripples (.nt)',
+        'xml' => 'XML (xml)',
+        'ttl' => 'Turtle (ttl)',
+        'json' => 'JSON (json)',
+        'jsonld' => 'JSON-LD (jsonld)' . $jsonld_dependency,
+        'nt' => 'N-Tripples (nt)',
       ],
       '#required' => TRUE,
     ];
@@ -259,7 +249,6 @@ class DcatExportSettingsForm extends ConfigFormBase {
     }
 
     $config->save();
-    $this->routeBuilder->rebuild();
 
     parent::submitForm($form, $form_state);
   }
@@ -272,14 +261,18 @@ class DcatExportSettingsForm extends ConfigFormBase {
    */
   protected function getEndpointLinks() {
     $config = $this->config('dcat_export.settings');
-    $export_paths = [];
+
+    $default_url = Url::fromRoute('dcat_export.export', [], ['absolute' => TRUE])->toString();
+    $default_link = Link::createFromRoute($default_url, 'dcat_export.export');
+
+    $export_links = [$default_link];
 
     foreach (array_filter($config->get('formats')) as $format) {
-      $url = Url::fromRoute('dcat_export.export.' . $format, [], ['absolute' => TRUE])->toString();
-      $export_paths[] = Link::createFromRoute($url, 'dcat_export.export.' . $format);
+      $url = Url::fromRoute('dcat_export.export', ['_format' => $format], ['absolute' => TRUE])->toString();
+      $export_links[] = Link::createFromRoute($url, 'dcat_export.export', ['_format' => $format]);
     }
 
-    return $export_paths;
+    return $export_links;
   }
 
   /**

@@ -103,6 +103,7 @@ class DcatExportService {
       $this->addResourceSilently($catalog, 'dcat:dataset', $dataset_resource);
     }
 
+    $format = $this->sanitizeFormat($format);
     $rdf_format = EasyRdf_Format::getFormat($format);
 
     // Allow other modules to alter the resource being added to the graph.
@@ -536,6 +537,33 @@ class DcatExportService {
     $ids = $query->execute();
 
     return $storage->loadMultiple($ids);
+  }
+
+  /**
+   * Set the format in right form suited for the EasyRdf library.
+   *
+   * @param string $format
+   *   The output format.
+   *
+   * @return string
+   *   The sanitized format.
+   */
+  protected function sanitizeFormat($format) {
+    switch ($format) {
+      case 'xml':
+        $format = 'rdfxml';
+        break;
+
+      case 'ttl':
+        $format = 'turtle';
+        break;
+
+      case 'nt':
+        $format = 'ntriples';
+        break;
+    }
+
+    return $format;
   }
 
   /**

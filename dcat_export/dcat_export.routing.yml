@@ -6,5 +6,10 @@ dcat_export.admin_settings:
   requirements:
     _permission: 'administer dcat export'
 
-route_callbacks:
-  - '\Drupal\dcat_export\Routing\ExportRoutes::routes'
+dcat_export.export:
+  path: '/dcat'
+  defaults:
+    _controller: '\Drupal\dcat_export\Controller\DcatExportController::export'
+    _title: 'DCAT feed'
+  requirements:
+    _permission: 'access dcat export feed'

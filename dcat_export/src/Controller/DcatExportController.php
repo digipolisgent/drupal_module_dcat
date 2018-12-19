@@ -4,8 +4,8 @@ namespace Drupal\dcat_export\Controller;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
-use Drupal\Core\Path\CurrentPathStack;
 use Drupal\dcat_export\DcatExportService;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -25,11 +25,11 @@ class DcatExportController implements ContainerInjectionInterface {
   protected $config;
 
   /**
-   * Current path stack object.
+   * Request object.
    *
-   * @var \Drupal\Core\Path\CurrentPathStack
+   * @var \Symfony\Component\HttpFoundation\Request
    */
-  protected $currentPath;
+  protected $request;
 
   /**
    * DCAT export service.
@@ -43,14 +43,14 @@ class DcatExportController implements ContainerInjectionInterface {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
-   * @param \Drupal\Core\Path\CurrentPathStack $current_path
-   *   The current path stack service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack.
    * @param \Drupal\dcat_export\DcatExportService $dcat_export_service
    *   Database service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, CurrentPathStack $current_path, DcatExportService $dcat_export_service) {
+  public function __construct(ConfigFactoryInterface $config_factory, RequestStack $request_stack, DcatExportService $dcat_export_service) {
     $this->config = $config_factory->get('dcat_export.settings');
-    $this->currentPath = $current_path;
+    $this->request = $request_stack->getCurrentRequest();
     $this->dcatExportService = $dcat_export_service;
   }
 
@@ -60,7 +60,7 @@ class DcatExportController implements ContainerInjectionInterface {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('path.current'),
+      $container->get('request_stack'),
       $container->get('dcat_export')
     );
   }
@@ -80,101 +80,62 @@ class DcatExportController implements ContainerInjectionInterface {
    *   Thrown when the output format is not found.
    */
   public function export() {
-    $format = $this->getFormatFromPath($this->currentPath->getPath());
+    $format = $this->getValidatedRequestFormat();
+    $mime_type = $this->request->getMimeType($format);
 
-    if (!$format) {
-      throw new NotFoundHttpException();
-    }
-
-    $format_info = $this->getFormatInfo($format);
-    $content = $this->dcatExportService->export($format_info['easy_rdf_format']);
+    $content = $this->dcatExportService->export($format);
 
     $response = new Response();
-    $response->headers->set('Content-Type', $format_info['content_type']);
+    $response->headers->set('Content-Type', $mime_type);
     $response->setContent($content);
 
     return $response;
   }
 
   /**
-   * Returns the chosen format based on the URL.
-   *
-   * @param string $path
-   *   A path to extract the format from.
+   * Get the requested format and validate if it's enabled.
    *
    * @return string
-   *   The output format.
+   *   The requested format.
+   *
+   * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+   *   Thrown when the output format is not found.
    */
-  protected function getFormatFromPath($path) {
-    if (!substr_count($path, '.')) {
-      return FALSE;
+  protected function getValidatedRequestFormat() {
+    $format = $this->request->getRequestFormat();
+
+    // When not defined, the default format is set to html earlier in the
+    // bootstrap process.
+    if ($format === 'html') {
+      // Set the first enabled format we encounter as default.
+      $format = reset($this->getEnabledFormats());
     }
 
-    $parts = explode('.', $path);
-    $format = end($parts);
-
-    if ($this->validateFormat($format)) {
-      return $format;
+    if (!$this->validateFormat($format)) {
+      throw new NotFoundHttpException();
     }
 
-    return FALSE;
+    return $format;
   }
 
   /**
-   * Get extra information about the output format.
-   *
-   * @param $format
-   *   The output format.
-   *
-   * @return array|false
-   *   Array containing the Internet Media Type and the EasyRdf format or false
-   *   when not found.
-   */
-  protected function getFormatInfo($format) {
-    switch ($format) {
-      case 'xml':
-        $easy_rdf_format = 'rdfxml';
-        $content_type = 'text/xml';
-        break;
-
-      case 'ttl':
-        $easy_rdf_format = 'turtle';
-        $content_type = 'text/turtle';
-        break;
-
-      case 'json':
-        $easy_rdf_format = 'json';
-        $content_type = 'application/json';
-        break;
-
-      case 'jsonld':
-        $easy_rdf_format = 'jsonld';
-        $content_type = 'application/ld+json';
-        break;
-
-      case 'nt':
-        $easy_rdf_format = 'ntriples';
-        $content_type = 'application/n-triples';
-        break;
-
-      default:
-        return FALSE;
-    }
-
-    return [
-      'easy_rdf_format' => $easy_rdf_format,
-      'content_type' => $content_type,
-    ];
-  }
-
-  /**
-   * Check whether or not the format exists and is activated.
+   * Check whether or not the format exists and is enabled.
    *
    * @return bool
    *   True if the format exists and is activated.
    */
   protected function validateFormat($format) {
-    return in_array($format, array_filter($this->config->get('formats')));
+    return in_array($format, $this->getEnabledFormats());
+  }
+
+  /**
+   * Get the enabled output formats.
+   *
+   * @return array
+   *   Array containing the enabled output formats. Always contains at least 1.
+   */
+  protected function getEnabledFormats() {
+    return array_filter($this->config->get('formats'));
   }
 
 }

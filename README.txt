@@ -65,6 +65,10 @@ DCAT export:
     1. Navigate to /admin/modules and enable the dcat_export module.
     2. Navigate to /admin/structure/dcat/settings/dcat_export and fill in all
        configuration fields.
+    3. Navigate to /dcat to get a DCAT export. By setting the _format query
+       parameter the output format can be chosen.
+       Note: Format selection is not done by Accept header due to
+       https://www.drupal.org/node/2501221.
 
 
 MAINTAINERS
