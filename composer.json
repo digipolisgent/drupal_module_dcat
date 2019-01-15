@@ -15,6 +15,11 @@
       "name": "Wesley De Vrient",
       "homepage":"https://www.drupal.org/u/wesleydv",
       "role": "Maintainer"
+    },
+    {
+      "name": "Lennart Van Vaerenbergh",
+      "homepage":"https://www.drupal.org/u/lennartvv",
+      "role": "Maintainer"
     }
   ],
   "minimum-stability": "dev",

@@ -2,12 +2,12 @@
 
 namespace Drupal\dcat_import\Plugin\migrate\source;
 
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\migrate\Plugin\migrate\id_map\Sql;
 use Drupal\migrate\Plugin\migrate\source\SourcePluginBase;
+use Drupal\dcat_import\Plugin\DcatGraph;
 use EasyRdf_Graph;
 use EasyRdf_Resource;
-use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\dcat_import\Plugin\DcatGraph;
 
 /**
  * DCAT feed source.
@@ -115,7 +115,7 @@ abstract class DcatFeedSource extends SourcePluginBase {
     }
 
     foreach ($imported as $uri => $uuid) {
-      $resource = new EasyRdf_Resource($uri, $graph);
+      $resource = $graph->resource($uri);
       $resource->add('deleted', 1);
       $deleted[] = $resource;
     }
