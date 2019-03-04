@@ -129,7 +129,7 @@ class DcatExportSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('formats'),
       '#multiple' => TRUE,
       '#options' => [
-        'xml' => 'XML (xml)',
+        'rdf' => 'RDF (xml)',
         'ttl' => 'Turtle (ttl)',
         'json' => 'JSON (json)',
         'jsonld' => 'JSON-LD (jsonld)' . $jsonld_dependency,

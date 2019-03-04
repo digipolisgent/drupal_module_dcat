@@ -41,7 +41,7 @@ class DcatExportServiceTest extends UnitTestCase {
     // Provide mandatory settings.
     $this->configFactory = $this->getConfigFactoryStub([
       'dcat_export.settings' => [
-        'formats' => ['xml'],
+        'formats' => ['rdf'],
         'catalog_title' => 'The title',
         'catalog_description' => 'The description',
         'catalog_uri' => 'http://www.catalog-example.com',
