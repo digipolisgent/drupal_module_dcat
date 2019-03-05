@@ -550,7 +550,7 @@ class DcatExportService {
    */
   protected function sanitizeFormat($format) {
     switch ($format) {
-      case 'xml':
+      case 'rdf':
         $format = 'rdfxml';
         break;
 
